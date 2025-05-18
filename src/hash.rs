@@ -51,7 +51,7 @@ impl<T: ?Sized + Eq + std::hash::Hash> Clone for HashInterner<T> {
 
 #[repr(C)]
 pub struct Hash<T: ?Sized + Eq + std::hash::Hash> {
-    set: RwLock<HashSet<InternedHash<T>>>,
+    set: RwLock<HashSet<InternedHash<T>, ahash::RandomState>>,
 }
 
 #[cfg(loom)]
@@ -91,7 +91,7 @@ impl<T: ?Sized + Eq + std::hash::Hash> HashInterner<T> {
     pub fn new() -> Self {
         Self {
             inner: Arc::new(Hash {
-                set: RwLock::new(HashSet::new()),
+                set: Default::default(),
             }),
         }
     }

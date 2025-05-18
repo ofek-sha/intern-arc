@@ -19,7 +19,7 @@ static HASH_INTERNERS: Lazy<RwLock<HashInternerPool>> = Lazy::new(Default::defau
 /// not drop the interned values — they are kept alive by the references you keep to them
 /// and are automatically freed when they are no longer references).
 pub struct HashInternerPool {
-    type_map: HashMap<TypeId, Box<dyn Any + Send + Sync + 'static>>,
+    type_map: HashMap<TypeId, Box<dyn Any + Send + Sync + 'static>, ahash::RandomState>,
 }
 
 impl Default for HashInternerPool {
@@ -31,7 +31,7 @@ impl Default for HashInternerPool {
 impl HashInternerPool {
     pub fn new() -> Self {
         Self {
-            type_map: HashMap::new(),
+            type_map: Default::default(),
         }
     }
 
@@ -84,7 +84,7 @@ static ORD_INTERNERS: Lazy<RwLock<OrdInternerPool>> = Lazy::new(Default::default
 /// not drop the interned values — they are kept alive by the references you keep to them
 /// and are automatically freed when they are no longer references).
 pub struct OrdInternerPool {
-    type_map: HashMap<TypeId, Box<dyn Any + Send + Sync + 'static>>,
+    type_map: HashMap<TypeId, Box<dyn Any + Send + Sync + 'static>, ahash::RandomState>,
 }
 
 impl Default for OrdInternerPool {
@@ -96,7 +96,7 @@ impl Default for OrdInternerPool {
 impl OrdInternerPool {
     pub fn new() -> Self {
         Self {
-            type_map: HashMap::new(),
+            type_map: Default::default(),
         }
     }
 
